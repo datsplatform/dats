@@ -4,12 +4,12 @@
 ## DATS Template Language
 
 ### Template Tags
-The DATS uses the [Mustache Template Language](https://mustache.github.io/) for constructing cross-folder views of data. Mustache is a logicless template language (e.g. there are no conditional statements) that can be used for constructing HTML pages. It works by expanding keyword tags present in a template page with data provided by the application. Therefore, all template pages written for the DATS platform must conform with the Mustache spec.
+The DATS uses the [Mustache Template Language](https://mustache.github.io/) for constructing cross-folder views of data. Mustache is a logicless template language (i.e. there are no conditional statements) that can be used for constructing HTML pages. It works by expanding keyword tags present in a template page with data provided by the application. The DATS platform uses Mustache to securely create pages that aggregate data across multiple folders. 
 
 Keyword tags in the Mustache language are specified by double curly brackets. For example, {{this}} is a Mustache tag, as well as {{#this}}. There are a few types of tags with specicial meanings:
 
 #### Variable Tags {{variable}}
-These tags specify a single variable of data that is passed in to the Mustache template processor. For example:
+These tags specify a single variable of data that is passed into the Mustache template processor. For example:
 	
 Template:
 
@@ -28,8 +28,8 @@ These tags will render a section of data multiple times. If the key provided to 
 	
 Template:
 
-	{{#hello}}
-	    Hello, {{name}}
+    {{#hello}}
+        Hello, {{name}}
     {{/hello}}
         
 With data:
@@ -50,7 +50,7 @@ Generates:
         
 
 ### DATS Template Keywords
-The DATS platform adds a few tags to the Mustache template language to assist developers in generating cross-folder views of their data.
+The DATS platform adds a few tags to the Mustache template language to assist developers in generating cross-folder views of a user's data.
 
 ##### DATS.results Section Tag
 The DATS.results section tag should be used to specify where in the template page cross-folder data should be placed. The entire section is repeated for each JSON document returned by a per-folder container instance. All template pages must contain the DATS.results tag to generate cross-folder views of data.
@@ -71,20 +71,20 @@ And JSON data returned from Folder 2:
 
 Generates the template:
 
-	Displaying data across my folders: Folder 1
+    Displaying data across my folders: Folder 1
     Displaying data across my folders: Folder 2
 
 
 ##### DATS.enter and DATS.entercmd Section Tags
 Because of DATS data-centric information flow control scheme, developers are unable to generate HTML anchor tag links that transition a user from an application instance running in a non-folder container to an application instance running in a per-folder container without assistance. The DATS.enter section tag will generate these enter links for the application developers. 
 
-In addition to the DATS.enter tag, developers must also specify the command with which they will run their application within the folder. This command must specify to the application whether it is running in a non-folder or per-folder container (e.g. "./run nonfolder" vs "./run perfolder"). To pass the command, developers must use the DATS.entercmd section tag after each DATS.enter tag and pass a JSON list of command arguments to run. DATS will then use the provided command and URL endpoint to start the application and redirect the user's browser.
+In addition to the DATS.enter tag, developers must also specify the command with which the DATS platform should run their application within the per-folder container. This command must specify to the application whether it is running in a non-folder or per-folder container (e.g. "./run nonfolder" vs "./run perfolder"). To pass the command, developers must use the DATS.entercmd section tag after each DATS.enter tag and pass a JSON list of command arguments to run. DATS will then use the provided command and URL endpoint to start the application and redirect the user's browser.
 
 Template:
 
 	{{#DATS.results}}
-    	<a href={{#DATS.enter}}"/folder-view"{{/DATS.enter}}> This is a link to {{myFolderData}} </a>
-        {{#DATS.entercmd}}["./run", "perfolder"]{{/DATS.entercmd}}
+    	    <a href={{#DATS.enter}}"/folder-view"{{/DATS.enter}}> This is a link to {{myFolderData}} </a>
+            {{#DATS.entercmd}}["./run", "perfolder"]{{/DATS.entercmd}}
 	{{/DATS.results}}
     
 With JSON data returned from Folder 1:
@@ -97,7 +97,7 @@ And JSON data returned from Folder 2:
 
 Generates the template:
 
-	<a href="https://380c212a4eeb5e2acef7b1a5ea1a4bfb.dats.com/folder-view"> This is a link to Folder 1 </a>
+    <a href="https://380c212a4eeb5e2acef7b1a5ea1a4bfb.dats.com/folder-view"> This is a link to Folder 1 </a>
     <a href="https://6718e4460ecb10d45cdd03dbafbef597.dats.com/folder-view"> This is a link to Folder 2 </a>
     
 ##### DATS.folder-name Variable Tag
@@ -106,8 +106,8 @@ The DATS.folder variable tag will simply embed the name of the folder that the J
 Template:
 
 	{{#DATS.results}}
-    	<a href={{#DATS.enter}}"/folder-view"{{/DATS.enter}}> {{DATS.folder-name}} with data {{myFolderData}} </a>
-        {{#DATS.entercmd}}["./run", "perfolder"]{{/DATS.entercmd}}
+    	    <a href={{#DATS.enter}}"/folder-view"{{/DATS.enter}}> {{DATS.folder-name}} with data {{myFolderData}} </a>
+            {{#DATS.entercmd}}["./run", "perfolder"]{{/DATS.entercmd}}
 	{{/DATS.results}}
     
 With JSON data returned from Folder 1 with folder name Home:
@@ -120,7 +120,7 @@ And JSON data returned from Folder 2 with folder name Work:
 
 Generates the template:
 
-	<a href="https://380c212a4eeb5e2acef7b1a5ea1a4bfb.dats.com/folder-view"> Home with data Folder 1 </a>
+    <a href="https://380c212a4eeb5e2acef7b1a5ea1a4bfb.dats.com/folder-view"> Home with data Folder 1 </a>
     <a href="https://6718e4460ecb10d45cdd03dbafbef597.dats.com/folder-view"> Work with data Folder 2 </a>
 
 
